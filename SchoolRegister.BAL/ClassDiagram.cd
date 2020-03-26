@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="SchoolRegister.BAL.Entities.Grade">
+    <Position X="12.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAICAAAAAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Entities\Grade.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SchoolRegister.BAL.Entities.Group">
+    <Position X="10.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Group.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SchoolRegister.BAL.Entities.Parent">
+    <Position X="5.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Parent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SchoolRegister.BAL.Entities.Student">
+    <Position X="9.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAgEAAAA=</HashCode>
+      <FileName>Entities\Student.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SchoolRegister.BAL.Entities.Subject">
+    <Position X="13.25" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAECAEAAAAAgAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Subject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SchoolRegister.BAL.Entities.Teacher">
+    <Position X="7.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Teacher.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SchoolRegister.BAL.User">
+    <Position X="7.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>Entities\User.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="SchoolRegister.BAL.IUser">
+    <Position X="11.5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>Entities\IUser.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="SchoolRegister.BAL.Entities.GradeScale">
+    <Position X="14.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAACAABA=</HashCode>
+      <FileName>Entities\GradeScale.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
