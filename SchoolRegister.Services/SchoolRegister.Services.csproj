@@ -5,13 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
-    <Folder Include="Services\" />
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
   </ItemGroup>
 
+
   <ItemGroup>
+    <ProjectReference Include="..\SchoolRegister.BAL\SchoolRegister.BAL.csproj" />
     <ProjectReference Include="..\SchoolRegister.DAL\SchoolRegister.DAL.csproj" />
     <ProjectReference Include="..\SchoolRegister.ViewModels\SchoolRegister.ViewModels.csproj" />
   </ItemGroup>
-
+  <ItemGroup>
+    <Folder Include="Interfaces\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
 </Project>
