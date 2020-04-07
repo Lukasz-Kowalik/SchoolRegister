@@ -1,26 +1,24 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolRegister.BAL.Entities
 {
     public class Subject
     {
+        [Required]
         public string Description { get; set; }
-        public IList<Group> Groups { get; set; }
+
         public int Id { get; set; }
+
+        [Required]
         public string Name { get; set; }
+
+        public IList<SubjectGroup> SubjectGroups { get; set; }
         public Teacher Teacher { get; set; }
 
-        public Subject(string description, IList<Group> groups, int id, string name, Teacher teacher)
-        {
-            Description = description;
-            Groups = groups;
-            Id = id;
-            Name = name;
-            Teacher = teacher;
-        }
-
-        public Subject()
-        {
-        }
+        [ForeignKey("Teacher")]
+        public int TeacherId { get; set; }
+        public IList<Grade> Grades { get; set; }
     }
 }

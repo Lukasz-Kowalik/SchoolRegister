@@ -1,30 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Text.RegularExpressions;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace SchoolRegister.BAL.Entities
 {
-    public class Student :User
+    public class Student : User
     {
-        public double AverageGrade { get; }
-
-        public IDictionary<string,double> AverageGraderPerSubject { get; }
-
         public IList<Grade> Grades { get; set; }
 
         public Group Group { get; set; }
 
-        public Student()
-        {
-        }
+        [ForeignKey("Group")]
+        public int GroupId { get; set; }
 
-        public Student(string firstName, string lastName, DateTime registrationDate, double averageGrade, IDictionary<string, double> averageGraderPerSubject, IList<Grade> grades, Group group) : base(firstName, lastName, registrationDate)
-        {
-            AverageGrade = averageGrade;
-            AverageGraderPerSubject = averageGraderPerSubject;
-            Grades = grades;
-            Group = group;
-        }
+        public Parent Parent { get; set; }
+
+        [ForeignKey("Parent")]
+        public int? ParentId { get; set; }
+
+        [NotMapped]
+        public double AverageGrade => Math.Round(Grades.Average(grade => (int)grade.GradeValue), 1);
+
+        [NotMapped]
+        public IDictionary<string, double> AverageGraderPerSubject => Grades
+            .GroupBy(g => g.Subject.Name)
+            .Select(g => new
+            {
+                SubjectName = g.Key,
+                AvgGrade = Math.Round(
+                    g.Average(avg => (int)avg.GradeValue)
+                    , 1)
+            })
+            .ToDictionary(avg => avg.SubjectName, avg => avg.AvgGrade);
     }
 }

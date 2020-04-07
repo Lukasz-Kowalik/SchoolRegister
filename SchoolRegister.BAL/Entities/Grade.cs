@@ -1,25 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolRegister.BAL.Entities
 {
     public class Grade
     {
+        [Key]
         public DateTime DateOfIssue { get; set; }
 
-        public GradeScale GradeValue{ get; set; }
+        public GradeScale GradeValue { get; set; }
 
-        public Subject Subject{ get; set; }
+        public Subject Subject { get; set; }
 
-        public Grade(DateTime dateOfIssue, GradeScale gradeValue, Subject subject)
-        {
-            GradeValue = gradeValue;
-            DateOfIssue = dateOfIssue;
-            Subject = subject;
-        }
-
-        public Grade()
-        {
-        }
+        [ForeignKey("Subject")]
+        public int SubjectId { get; set; }
     }
 }
