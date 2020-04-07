@@ -1,18 +1,12 @@
-﻿namespace SchoolRegister.BAL.Entities
+﻿using System.Collections.Generic;
+
+namespace SchoolRegister.BAL.Entities
 {
     public class Group
     {
-        public Group()
-        {
-        }
-
-        public Group(int id, string name)
-        {
-            Id = id;
-            Name = name;
-        }
-
         public int Id { get; set; }
         public string Name { get; set; }
+        public IList<Student> Students { get; set; }
+        public IList<SubjectGroup> SubjectGroups { get; set; }
     }
 }

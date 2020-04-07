@@ -1,26 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 
-namespace SchoolRegister.BAL
+namespace SchoolRegister.BAL.Entities
 {
-    public class User : IUser
+    public class User : IdentityUser<int>
     {
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
 
         public DateTime RegistrationDate { get; set; }
-
-        public User()
-        {
-        }
-
-        public User(string firstName, string lastName, DateTime registrationDate)
-        {
-            FirstName = firstName;
-            LastName = lastName;
-            RegistrationDate = registrationDate;
-        }
     }
 }
