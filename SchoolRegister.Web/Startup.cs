@@ -96,13 +96,15 @@ namespace SchoolRegister.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
             #region Our Services
+
             var cs = new ConnectionStringDto() { ConnectionString = _connectionString };
             services.AddSingleton(cs);
             services.AddScoped<DbContext, ApplicationDbContext>();
             services.AddScoped<DbContextOptions<ApplicationDbContext>>();
-            #endregion
+
+            #endregion Our Services
+
             Services = services;
         }
 
