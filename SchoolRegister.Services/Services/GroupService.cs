@@ -7,9 +7,9 @@ using SchoolRegister.Services.Interfaces;
 
 namespace SchoolRegister.Services.Services
 {
-    class GroupServices:BaseService,IGroupService
+  public  class GroupService:BaseService,IGroupService
     {
-        public GroupServices(ApplicationDbContext dbContext) : base(dbContext)
+        public GroupService(ApplicationDbContext dbContext) : base(dbContext)
         {
         }
 
