@@ -14,11 +14,11 @@ namespace SchoolRegister.BAL.Entities
         [Required]
         public string Name { get; set; }
 
-        public IList<SubjectGroup> SubjectGroups { get; set; }
-        public Teacher Teacher { get; set; }
+        public virtual IList<SubjectGroup> SubjectGroups { get; set; }
+        public virtual Teacher Teacher { get; set; }
 
         [ForeignKey("Teacher")]
-        public int TeacherId { get; set; }
-        public IList<Grade> Grades { get; set; }
+        public int? TeacherId { get; set; }
+        public virtual IList<Grade> Grades { get; set; }
     }
 }

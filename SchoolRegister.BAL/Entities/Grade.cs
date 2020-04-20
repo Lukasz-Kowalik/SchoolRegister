@@ -11,9 +11,14 @@ namespace SchoolRegister.BAL.Entities
 
         public GradeScale GradeValue { get; set; }
 
-        public Subject Subject { get; set; }
-
         [ForeignKey("Subject")]
         public int SubjectId { get; set; }
+
+        public virtual Subject Subject { get; set; }
+
+        [ForeignKey("Student")]
+        public int StudentId { get; set; }
+
+        public virtual Student Student { get; set; }
     }
 }
