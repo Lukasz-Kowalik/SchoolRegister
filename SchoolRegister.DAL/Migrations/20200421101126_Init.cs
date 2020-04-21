@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SchoolRegister.DAL.Migrations
 {
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -93,7 +93,7 @@ namespace SchoolRegister.DAL.Migrations
                         column: x => x.GroupId,
                         principalTable: "Groups",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_AspNetUsers_AspNetUsers_ParentId",
                         column: x => x.ParentId,
@@ -195,7 +195,7 @@ namespace SchoolRegister.DAL.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: false),
-                    TeacherId = table.Column<int>(nullable: false)
+                    TeacherId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -205,7 +205,7 @@ namespace SchoolRegister.DAL.Migrations
                         column: x => x.TeacherId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -215,11 +215,12 @@ namespace SchoolRegister.DAL.Migrations
                     DateOfIssue = table.Column<DateTime>(nullable: false),
                     GradeValue = table.Column<int>(nullable: false),
                     SubjectId = table.Column<int>(nullable: false),
-                    StudentId = table.Column<int>(nullable: true)
+                    StudentId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Grade", x => x.DateOfIssue);
+                    table.PrimaryKey("PK_Grade", x => new { x.DateOfIssue, x.StudentId, x.SubjectId });
+                    table.UniqueConstraint("AK_Grade_DateOfIssue", x => x.DateOfIssue);
                     table.ForeignKey(
                         name: "FK_Grade_AspNetUsers_StudentId",
                         column: x => x.StudentId,

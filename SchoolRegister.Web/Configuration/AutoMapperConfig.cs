@@ -28,6 +28,9 @@ namespace SchoolRegister.Web.Configuration
                         );
                 mapper.CreateMap<SubjectVm, AddOrUpdateSubjectDto>();
                 mapper.CreateMap<Teacher, TeacherVm>();
+                mapper.CreateMap<GradeDto, Grade>();
+                mapper.CreateMap<Grade, GradeVm>();
+                //to do dodac reszte map
             });
             return configurationExpression;
         }
