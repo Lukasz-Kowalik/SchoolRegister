@@ -4,6 +4,7 @@ using System.Text;
 using SchoolRegister.BAL.Entities;
 using SchoolRegister.DAL.EF;
 using SchoolRegister.Services.Interfaces;
+using SchoolRegister.ViewModels.DTOs;
 
 namespace SchoolRegister.Services.Services
 {
@@ -13,7 +14,8 @@ namespace SchoolRegister.Services.Services
         {
         }
 
-        public Lazy<Group> Get()
+
+        public List<Group> Get()
         {
             throw new NotImplementedException();
         }
@@ -22,13 +24,13 @@ namespace SchoolRegister.Services.Services
         {
             throw new NotImplementedException();
         }
-        
-        public void Add(Group @group)
+
+        public void Add(GroupDto @group)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(Group @group, int productId)
+        public void Update(GroupDto @group, int productId)
         {
             throw new NotImplementedException();
         }

@@ -14,17 +14,17 @@ namespace SchoolRegister.Services.Services
         {
         }
 
-        public List<Grade> Get(Student student)
+        public List<Grade> Get(StudentDto student)
         {
             throw new NotImplementedException();
         }
 
-        public void AddOrUpdate(GradeDto grade, Student student)
+        public void AddOrUpdate(GradeDto grade, StudentDto student)
         {
             throw new NotImplementedException();
         }
 
-        public void Remove(GradeDto grade, Student student)
+        public void Remove(GradeDto grade, StudentDto student)
         {
             throw new NotImplementedException();
         }

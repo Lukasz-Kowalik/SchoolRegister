@@ -1,17 +1,19 @@
 ﻿using SchoolRegister.BAL.Entities;
 using System;
+using System.Collections.Generic;
+using SchoolRegister.ViewModels.DTOs;
 
 namespace SchoolRegister.Services.Interfaces
 {
     public interface IGroupService
     {
-        Lazy<Group> Get();
+        List<Group> Get();
 
         Group Get(int id);
 
-        void Add(Group @group);
+        void Add(GroupDto group);
 
-        void Update(Group @group, int productId);
+        void Update(GroupDto group, int productId);
 
         void Delete(int id);
     }

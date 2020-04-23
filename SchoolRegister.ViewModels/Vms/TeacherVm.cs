@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SchoolRegister.ViewModels.Vms
+﻿namespace SchoolRegister.ViewModels.Vms
 {
-  public class TeacherVm
+    public class TeacherVm
     {
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 }
