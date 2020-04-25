@@ -1,6 +1,4 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using SchoolRegister.BAL.Entities
-@inject SignInManager<User> SignInManager
+﻿@inject SignInManager<User> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
