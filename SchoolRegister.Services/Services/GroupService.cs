@@ -15,12 +15,12 @@ namespace SchoolRegister.Services.Services
         }
 
 
-        public List<Group> Get()
+        public List<Group> GetGroups()
         {
             throw new NotImplementedException();
         }
 
-        public Group Get(int id)
+        public Group GetGroup(int id)
         {
             throw new NotImplementedException();
         }

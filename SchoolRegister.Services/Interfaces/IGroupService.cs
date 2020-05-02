@@ -7,9 +7,9 @@ namespace SchoolRegister.Services.Interfaces
 {
     public interface IGroupService
     {
-        List<Group> Get();
+        List<Group> GetGroups();
 
-        Group Get(int id);
+        Group GetGroup(int id);
 
         void Add(GroupDto group);
 

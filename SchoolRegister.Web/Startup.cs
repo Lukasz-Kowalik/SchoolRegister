@@ -106,7 +106,11 @@ namespace SchoolRegister.Web
             services.AddScoped<ITeacherService, TeacherService>();
             services.AddScoped<IStudentService, StudentService>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc(options =>
+            {
+                //add ValidateAntiForgeryToken for all post methods automatically
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             #endregion
             #region Our Services
             var cs = new ConnectionStringDto() { ConnectionString = _connectionString };

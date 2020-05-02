@@ -1,14 +1,18 @@
 ﻿using SchoolRegister.BAL.Entities;
 using SchoolRegister.ViewModels.DTOs;
+using SchoolRegister.ViewModels.Vms;
+using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace SchoolRegister.Services.Interfaces
 {
     public interface IGradeService
     {
-        List<Grade> Get(StudentDto student);
-
-        void AddOrUpdate(GradeDto grade, StudentDto student);
-        void Remove(GradeDto grade, StudentDto student);
+        IEnumerable<GradeVm> GetGrades(Expression<Func<Grade,bool>> expression=null);
+        GradeVm GetGrade(Expression<Func<Grade, bool>> expression);
+        bool Add(GradeVm  grade, Student student);
+        bool Update(GradeVm grade, Student student);
+        bool Remove(GradeDto grade, Student student);
     }
 }

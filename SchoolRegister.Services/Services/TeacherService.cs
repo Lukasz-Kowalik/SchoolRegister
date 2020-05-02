@@ -49,12 +49,12 @@ namespace SchoolRegister.Services.Services
 
                 if (!_userManager.IsInRoleAsync(teacher, "Teacher").Result)
                 {
-                    throw new ArgumentNullException("user is not a teacher");
+                    throw new ArgumentException("user is not a teacher");
                 }
 
                 if (!_userManager.IsInRoleAsync(student, "Student").Result)
                 {
-                    throw new ArgumentNullException("user is not a student");
+                    throw new ArgumentException("user is not a student");
                 }
 
                 var mailMessage = new MailMessage(to: student.Parent.Email,

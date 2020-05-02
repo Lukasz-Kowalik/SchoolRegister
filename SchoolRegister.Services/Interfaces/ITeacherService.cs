@@ -11,9 +11,7 @@ namespace SchoolRegister.Services.Interfaces
     public interface ITeacherService
     {
         bool SendEmailToParent(EmailMessageDto parent);
-
         TeacherVm GetTeacher(Expression<Func<Teacher, bool>> filter);
-
         IEnumerable<TeacherVm> GetTeachers(Expression<Func<Teacher, bool>> filter = null);
     }
 }

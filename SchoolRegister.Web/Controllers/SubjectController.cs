@@ -1,13 +1,13 @@
-﻿using AutoMapper;
+﻿using System.Linq;
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SchoolRegister.BAL.Entities;
 using SchoolRegister.Services.Interfaces;
 using SchoolRegister.ViewModels.DTOs;
-using System.Linq;
 
-namespace SchoolRegister.Web.Areas.Identity.Pages.Account.Manage
+namespace SchoolRegister.Web.Controllers
 {
     public class SubjectController : Controller
     {
@@ -37,7 +37,7 @@ namespace SchoolRegister.Web.Areas.Identity.Pages.Account.Manage
             }
             else
             {
-                return View();
+                return View("Error");
             }
         }
 

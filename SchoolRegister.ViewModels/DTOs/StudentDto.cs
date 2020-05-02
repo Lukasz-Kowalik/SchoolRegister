@@ -5,7 +5,6 @@ namespace SchoolRegister.ViewModels.DTOs
     public class StudentDto
     {
         public IList<GradeDto> Grades { get; set; }
-
         public GroupDto Group { get; set; }
         public ParentDto Parent { get; set; }
         public double AverageGrade { get; set; }
