@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using SchoolRegister.BAL.Entities;
 using SchoolRegister.DAL.EF;
 using SchoolRegister.Services.Interfaces;
@@ -18,13 +19,13 @@ namespace SchoolRegister.Services.Services
     {
         private readonly SmtpClient _smtpClient;
         private readonly UserManager<User> _userManager;
-        private readonly IGradeService _gradeService;
+     
 
-        public TeacherService(ApplicationDbContext dbContext, SmtpClient smtpClient, UserManager<User> userManager, IGradeService gradeService) : base(dbContext)
+        public TeacherService(ApplicationDbContext dbContext, SmtpClient smtpClient, UserManager<User> userManager) : base(dbContext)
         {
             _smtpClient = smtpClient;
             _userManager = userManager;
-            _gradeService = gradeService;
+         
         }
 
         public bool SendEmailToParent(EmailMessageDto email)
@@ -37,12 +38,14 @@ namespace SchoolRegister.Services.Services
                 }
 
                 var teacher = _dbContext.Users.OfType<Teacher>()
+                    
                     .FirstOrDefault(x => x.Id == email.TeacherId);
 
                 var student = _dbContext.Users.OfType<Student>()
+                    
                     .FirstOrDefault(s => s.Id == email.StudentId);
 
-                if (teacher == null || student == null)
+                if (teacher == null || student?.Parent == null)
                 {
                     throw new ArgumentNullException("user don't exist");
                 }
@@ -95,6 +98,7 @@ namespace SchoolRegister.Services.Services
             var teachersVm = Mapper.Map<IEnumerable<TeacherVm>>(teachers);
             return teachersVm;
         }
+
         protected override void Dispose(bool disposing)
         {
             _smtpClient.Dispose();
