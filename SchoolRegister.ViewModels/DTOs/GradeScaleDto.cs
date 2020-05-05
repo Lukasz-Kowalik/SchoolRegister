@@ -1,4 +1,8 @@
-﻿namespace SchoolRegister.ViewModels.DTOs
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace SchoolRegister.ViewModels.DTOs
 {
     public enum GradeScaleDto
     {

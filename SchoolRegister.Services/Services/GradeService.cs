@@ -15,16 +15,18 @@ namespace SchoolRegister.Services.Services
     public class GradeService : BaseService, IGradeService
     {
         private readonly IStudentService _studentService;
+        private readonly ISubjectService _subjectService;
 
-        public GradeService(ApplicationDbContext dbContext, IStudentService studentService) : base(dbContext)
+        public GradeService(ApplicationDbContext dbContext, IStudentService studentService, ISubjectService subjectService) : base(dbContext)
         {
             _studentService = studentService;
+            _subjectService = subjectService;
         }
 
         public IEnumerable<GradeVm> GetGrades(Expression<Func<Grade, bool>> expression)
         {
             var gradesEntities = _dbContext.Grade
-                .AsNoTracking()
+                .Include(g => g.Subject)
                 .AsQueryable();
             if (expression != null)
             {
@@ -37,25 +39,28 @@ namespace SchoolRegister.Services.Services
 
         public GradeVm GetGrade(Expression<Func<Grade, bool>> expression)
         {
-            var gradeEntity = _dbContext.Grade.AsNoTracking().SingleOrDefault(expression);
+            var gradeEntity = _dbContext.Grade.SingleOrDefault(expression);
             var grade = Mapper.Map<GradeVm>(gradeEntity);
             return grade;
         }
 
-        public bool Add(GradeVm grade, Student student)
+        public void AddGrade(GradeDto grade)
         {
-            var gradeDto = Mapper.Map<GradeVm>(grade);
-            return true;
-        }
+            var subject = _subjectService.GetSubject(s => s.Id == grade.SubjectId);
+            if (subject == null)
+            {
+                throw new ArgumentException("Subject doesn't exist");
+            }
 
-        public bool Update(GradeVm grade, Student student)
-        {
-            throw new NotImplementedException();
-        }
+            var student = _studentService.GetStudent(s => s.Id == grade.StudentId);
+            if (student == null)
+            {
+                throw new ArgumentException("Student doesn't exist");
+            }
 
-        public bool Remove(GradeDto grade, Student student)
-        {
-            throw new NotImplementedException();
+            var gradeEntity = Mapper.Map<Grade>(grade);
+            _dbContext.Grade.Add(gradeEntity);
+            _dbContext.SaveChanges();
         }
     }
 }
