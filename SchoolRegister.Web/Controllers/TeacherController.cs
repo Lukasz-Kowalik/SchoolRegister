@@ -5,6 +5,7 @@ using SchoolRegister.Services.Interfaces;
 using SchoolRegister.ViewModels.DTOs;
 using System;
 using System.Threading.Tasks;
+using SchoolRegister.ViewModels.Vms;
 
 namespace SchoolRegister.Web.Controllers
 {
@@ -80,10 +81,10 @@ namespace SchoolRegister.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult IssueFinalGrade(int StudentId)
+        public IActionResult IssueFinalGrade(StudentVm student)
         {
-            var student = _studentService.GetStudent(s => s.Id == StudentId);
-            return View(student);
+            var studentEntity = _studentService.GetStudent(s => s.Id == student.Id);
+            return View(studentEntity);
         }
     }
 }
