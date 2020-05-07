@@ -11,25 +11,24 @@ namespace SchoolRegister.Web.Controllers
 {
     public class GradeController : Controller
     {
-        private readonly IStudentService _studentService;
         private readonly IGradeService _gradeService;
         private readonly UserManager<User> _userManager;
         private readonly IParentService _parentService;
-        private readonly ISubjectService _subjectService;
 
-        public GradeController(UserManager<User> userManager, IStudentService studentService, IGradeService gradeService, IParentService parentService, ISubjectService subjectService)
+        public GradeController(UserManager<User> userManager, IGradeService gradeService, IParentService parentService)
         {
-            _studentService = studentService;
             _gradeService = gradeService;
             _parentService = parentService;
-            _subjectService = subjectService;
             _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
-
+            if (user == null)
+            {
+                return View("Error");
+            }
             var isParent = await _userManager.IsInRoleAsync(user, "Parent");
             var isStudent = await _userManager.IsInRoleAsync(user, "Student");
             var isTeacher = await _userManager.IsInRoleAsync(user, "Teacher");
@@ -59,14 +58,14 @@ namespace SchoolRegister.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> AddGrade()
+        public IActionResult AddGrade()
         {
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddGrade(GradeDto grade)
+        public IActionResult AddGrade(GradeDto grade)
         {
             if (!ModelState.IsValid)
             {
@@ -79,14 +78,14 @@ namespace SchoolRegister.Web.Controllers
                 ViewBag.Success = $"Grade added";
                 return View();
             }
-            catch (ArgumentException e)
-            {
-                ViewBag.NotFound = e.Message;
-                return View();
-            }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                if (e is ArgumentNullException || e is ArgumentException)
+                {
+                    ViewBag.Info = e.Message;
+                    return View();
+                }
+
                 return View("Error");
             }
         }

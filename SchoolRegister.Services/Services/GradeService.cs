@@ -49,7 +49,7 @@ namespace SchoolRegister.Services.Services
             var subject = _subjectService.GetSubject(s => s.Id == grade.SubjectId);
             if (subject == null)
             {
-                throw new ArgumentException("Subject doesn't exist");
+                throw new ArgumentNullException("Subject doesn't exist");
             }
 
             var student = _studentService.GetStudent(s => s.Id == grade.StudentId);

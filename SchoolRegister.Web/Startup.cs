@@ -105,7 +105,7 @@ namespace SchoolRegister.Web
             services.AddScoped<ISubjectService, SubjectService>();
             services.AddScoped<ITeacherService, TeacherService>();
             services.AddScoped<IStudentService, StudentService>();
-
+            services.AddScoped<IParentService, ParentService>();
             services.AddMvc(options =>
             {
                 //add ValidateAntiForgeryToken for all post methods automatically

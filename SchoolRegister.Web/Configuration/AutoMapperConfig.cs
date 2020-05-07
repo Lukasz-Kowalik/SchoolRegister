@@ -19,8 +19,8 @@ namespace SchoolRegister.Web.Configuration
                 mapper.CreateMap<GradeVm, GradeDto>();
                 mapper.CreateMap<ParentVm, ParentDto>();
                 mapper.CreateMap<StudentVm, StudentDto>();
-                mapper.CreateMap<Group, GradeDto>();
-
+                mapper.CreateMap<GroupVm, GradeDto>();
+                mapper.CreateMap<GradeScaleVm, GradeScaleDto>();
                 //dto->entity
                 mapper.CreateMap<AddOrUpdateSubjectDto, Subject>();
                 mapper.CreateMap<GradeDto, Grade>();
@@ -28,12 +28,13 @@ namespace SchoolRegister.Web.Configuration
                 mapper.CreateMap<ParentDto, Parent>();
                 mapper.CreateMap<StudentDto, Student>();
                 mapper.CreateMap<GradeDto, Group>();
-                
+                mapper.CreateMap<GradeScaleDto, GradeScale>();
                 //entity->view
-                mapper.CreateMap<Grade,GradeVm>();
-                mapper.CreateMap<Parent,ParentVm>();
-                mapper.CreateMap<Student,StudentVm>();
-                mapper.CreateMap<SubjectGroup,SubjectGroupVm>();
+                mapper.CreateMap<GradeScale, GradeScaleVm>();
+                mapper.CreateMap<Grade, GradeVm>();
+                mapper.CreateMap<Parent, ParentVm>();
+                mapper.CreateMap<Student, StudentVm>();
+                mapper.CreateMap<SubjectGroup, SubjectGroupVm>();
                 mapper.CreateMap<Group, GroupVm>();
                 mapper.CreateMap<Teacher, TeacherVm>();
                 mapper.CreateMap<Subject, SubjectVm>()
@@ -47,7 +48,8 @@ namespace SchoolRegister.Web.Configuration
                             src => src.SubjectGroups.Select(y => y.Group)
                         )
                     );
-               });
+            });
+
             return configurationExpression;
         }
     }

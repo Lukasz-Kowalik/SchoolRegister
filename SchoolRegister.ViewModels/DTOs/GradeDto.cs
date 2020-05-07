@@ -14,6 +14,6 @@ namespace SchoolRegister.ViewModels.DTOs
         public int SubjectId { get; set; }
         [Required]
         public int StudentId { get; set; }
-   
+       // public  AddOrUpdateSubjectDto Subject { get; set; }
     }
 }

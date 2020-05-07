@@ -1,11 +1,12 @@
-﻿using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SchoolRegister.BAL.Entities;
 using SchoolRegister.Services.Interfaces;
 using SchoolRegister.ViewModels.DTOs;
+using System;
+using System.Linq;
 
 namespace SchoolRegister.Web.Controllers
 {
@@ -14,7 +15,7 @@ namespace SchoolRegister.Web.Controllers
         private readonly ISubjectService _subjectService;
         private readonly ITeacherService _teacherService;
         private readonly UserManager<User> _userManager;
-
+        
         public SubjectController(ISubjectService subjectService, ITeacherService teacherService, UserManager<User> userManager)
         {
             _subjectService = subjectService;
@@ -25,7 +26,10 @@ namespace SchoolRegister.Web.Controllers
         public IActionResult Index()
         {
             var user = _userManager.GetUserAsync(User).Result;
-
+            if (user == null)
+            {
+                return View("Error");
+            }
             if (_userManager.IsInRoleAsync(user, "Admin").Result)
             {
                 return View(_subjectService.GetSubjects());
@@ -66,13 +70,21 @@ namespace SchoolRegister.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AddOrEditSubject(AddOrUpdateSubjectDto addOrUpdateSubjectDto)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _subjectService.AddOrUpdate(addOrUpdateSubjectDto);
-                return RedirectToAction("Index");
-            }
+                if (ModelState.IsValid)
+                {
+                    _subjectService.AddOrUpdate(addOrUpdateSubjectDto);
+                    return RedirectToAction("Index");
+                }
 
-            return View();
+                return View();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
     }
 }

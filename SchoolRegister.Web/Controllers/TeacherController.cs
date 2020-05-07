@@ -5,7 +5,6 @@ using SchoolRegister.Services.Interfaces;
 using SchoolRegister.ViewModels.DTOs;
 using System;
 using System.Threading.Tasks;
-using SchoolRegister.ViewModels.Vms;
 
 namespace SchoolRegister.Web.Controllers
 {
@@ -25,6 +24,10 @@ namespace SchoolRegister.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return View("Error");
+            }
             if (_userManager.IsInRoleAsync(user, "Teacher").Result)
             {
                 return View();
@@ -53,8 +56,12 @@ namespace SchoolRegister.Web.Controllers
             }
             catch (Exception e)
             {
-                //foo log exception to ILogger
-                Console.WriteLine(e);
+                if (e is ArgumentNullException || e is ArgumentException)
+                {
+                    ViewBag.Info = e.Message;
+                    return View();
+                }
+
                 return View("Error");
             }
         }
@@ -63,13 +70,17 @@ namespace SchoolRegister.Web.Controllers
         public async Task<IActionResult> IssueFinalGrade()
         {
             var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return View("Error");
+            }
             var isTeacher = await _userManager.IsInRoleAsync(user, "Teacher");
             return isTeacher ? View() : View("Error");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> IssueFinalGrade(int StudentId)
+        public IActionResult IssueFinalGrade(int StudentId)
         {
             var student = _studentService.GetStudent(s => s.Id == StudentId);
             return View(student);
