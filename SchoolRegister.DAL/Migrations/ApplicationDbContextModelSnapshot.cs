@@ -106,13 +106,15 @@ namespace SchoolRegister.DAL.Migrations
                 {
                     b.Property<DateTime>("DateOfIssue");
 
-                    b.Property<int>("GradeValue");
-
-                    b.Property<int?>("StudentId");
+                    b.Property<int>("StudentId");
 
                     b.Property<int>("SubjectId");
 
-                    b.HasKey("DateOfIssue");
+                    b.Property<int>("GradeValue");
+
+                    b.HasKey("DateOfIssue", "StudentId", "SubjectId");
+
+                    b.HasAlternateKey("DateOfIssue");
 
                     b.HasIndex("StudentId");
 
@@ -172,7 +174,7 @@ namespace SchoolRegister.DAL.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<int>("TeacherId");
+                    b.Property<int?>("TeacherId");
 
                     b.HasKey("Id");
 
@@ -270,7 +272,7 @@ namespace SchoolRegister.DAL.Migrations
                 {
                     b.HasBaseType("SchoolRegister.BAL.Entities.User");
 
-                    b.Property<int>("GroupId");
+                    b.Property<int?>("GroupId");
 
                     b.Property<int?>("ParentId");
 
@@ -341,9 +343,10 @@ namespace SchoolRegister.DAL.Migrations
 
             modelBuilder.Entity("SchoolRegister.BAL.Entities.Grade", b =>
                 {
-                    b.HasOne("SchoolRegister.BAL.Entities.Student")
+                    b.HasOne("SchoolRegister.BAL.Entities.Student", "Student")
                         .WithMany("Grades")
-                        .HasForeignKey("StudentId");
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("SchoolRegister.BAL.Entities.Subject", "Subject")
                         .WithMany("Grades")
@@ -355,8 +358,7 @@ namespace SchoolRegister.DAL.Migrations
                 {
                     b.HasOne("SchoolRegister.BAL.Entities.Teacher", "Teacher")
                         .WithMany("Subjects")
-                        .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("TeacherId");
                 });
 
             modelBuilder.Entity("SchoolRegister.BAL.Entities.SubjectGroup", b =>
@@ -376,8 +378,7 @@ namespace SchoolRegister.DAL.Migrations
                 {
                     b.HasOne("SchoolRegister.BAL.Entities.Group", "Group")
                         .WithMany("Students")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("GroupId");
 
                     b.HasOne("SchoolRegister.BAL.Entities.Parent", "Parent")
                         .WithMany("Students")

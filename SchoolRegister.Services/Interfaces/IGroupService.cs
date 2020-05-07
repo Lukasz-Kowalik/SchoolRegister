@@ -1,18 +1,22 @@
 ﻿using SchoolRegister.BAL.Entities;
+using SchoolRegister.ViewModels.DTOs;
+using SchoolRegister.ViewModels.Vms;
 using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace SchoolRegister.Services.Interfaces
 {
     public interface IGroupService
     {
-        Lazy<Group> Get();
+        IEnumerable<GroupVm> GetGroups(Expression<Func<Group, bool>> expression = null);
 
-        Group Get(int id);
+        GroupVm GetGroup(Expression<Func<Group, bool>> expression);
 
-        void Add(Group @group);
-
-        void Update(Group @group, int productId);
-
-        void Delete(int id);
+        void Add(GroupDto group);
+        
+        void Update(GroupDto group);
+        void Delete(int groupId);
+        
     }
 }

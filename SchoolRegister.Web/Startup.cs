@@ -11,6 +11,12 @@ using Microsoft.Extensions.DependencyInjection;
 using SchoolRegister.BAL.Entities;
 using SchoolRegister.DAL.EF;
 using System;
+using System.Net;
+using System.Net.Mail;
+using Castle.Core.Logging;
+using SchoolRegister.Services.Interfaces;
+using SchoolRegister.Services.Services;
+using SchoolRegister.Web.Configuration;
 
 namespace SchoolRegister.Web
 {
@@ -47,64 +53,77 @@ namespace SchoolRegister.Web
         public void ConfigureServices(IServiceCollection services)
         {
             #region Framework Services
-
             // Add framework services.
             services.AddOptions();
             services.AddApplicationInsightsTelemetry(Configuration);
-
             services.Configure<CookiePolicyOptions>(options =>
             {
-                options.CheckConsentNeeded = context => true;
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+ options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(10);
                 options.Cookie.HttpOnly = true;
             });
-
-            services.AddDbContext<ApplicationDbContext>(
-                options =>
-                {
-                    options.UseSqlServer(_connectionString);
-                });
-
-            services.AddDefaultIdentity<User>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-
+            services.AddDbContext<ApplicationDbContext>(options =>
+            {
+                options.UseSqlServer(_connectionString); // SQL SERVER
+            });
+            services.AddIdentity<User, Role>()
+            .AddRoles<Role>()
+            .AddRoleManager<RoleManager<Role>>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddSignInManager<SignInManager<User>>()
+            .AddDefaultUI()
+            .AddDefaultTokenProviders();
+            services.AddScoped<IUserClaimsPrincipalFactory<User>, UserClaimsPrincipalFactory<User,
+           Role>>();
             services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
-            services.Configure<FormOptions>(options =>
+            services.Configure<FormOptions>(x =>
             {
-                options.ValueLengthLimit = int.MaxValue;
-                options.MultipartBodyLengthLimit = int.MaxValue;
-                options.KeyLengthLimit = int.MaxValue;
+                x.ValueLengthLimit = int.MaxValue;
+                x.MultipartBodyLengthLimit = int.MaxValue;
+                x.KeyLengthLimit = int.MaxValue;
             });
-            services.AddScoped<UserManager<IdentityUser>, UserManager<IdentityUser>>();
-            services.AddScoped<IUserStore<IdentityUser>, UserStore<IdentityUser>>();
-            services.AddScoped<IPasswordHasher<IdentityUser>, PasswordHasher<IdentityUser>>();
-            services.AddScoped<SignInManager<IdentityUser>, SignInManager<IdentityUser>>();
-            services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser>, UserClaimsPrincipalFactory<IdentityUser>>();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
-            #endregion Framework Services
-
-            services.Configure<CookiePolicyOptions>(options =>
+            services.AddScoped((serviceProvider) =>
             {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
+                var config = serviceProvider.GetRequiredService<IConfiguration>();
+                return new SmtpClient()
+                {
+                    Host = config.GetValue<String>("Email:Smtp:Host"),
+                    Port = config.GetValue<int>("Email:Smtp:Port"),
+                    Credentials = new NetworkCredential(
+                config.GetValue<String>("Email:Smtp:Username"),
+                config.GetValue<String>("Email:Smtp:Password")
+                )
+                };
             });
-
+            services.AddScoped<IGroupService, GroupService>();
+            services.AddScoped<IGradeService, GradeService>();
+            services.AddScoped<ISubjectService, SubjectService>();
+            services.AddScoped<ITeacherService, TeacherService>();
+            services.AddScoped<IStudentService, StudentService>();
+            services.AddScoped<IParentService, ParentService>();
+            services.AddMvc(options =>
+            {
+                //add ValidateAntiForgeryToken for all post methods automatically
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            #endregion
             #region Our Services
-
             var cs = new ConnectionStringDto() { ConnectionString = _connectionString };
             services.AddSingleton(cs);
+            var mappingConfig = new AutoMapper.MapperConfiguration(cfg =>
+            {
+                cfg.Mapping();
+            });
+            services.AddSingleton(x => mappingConfig.CreateMapper());
             services.AddScoped<DbContext, ApplicationDbContext>();
             services.AddScoped<DbContextOptions<ApplicationDbContext>>();
-
-            #endregion Our Services
-
+            services.AddScoped<ISubjectService, SubjectService>();
+            #endregion
             Services = services;
         }
 
@@ -123,8 +142,7 @@ namespace SchoolRegister.Web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-            app.UseSession();
-            app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

@@ -1,0 +1,43 @@
+﻿@model SchoolRegister.ViewModels.DTOs.EmailMessageDto
+
+@{
+    ViewData["Title"] = "Send email";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h4>Send Email</h4>
+<p class="text-danger">@ViewBag.Info</p>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-controller="Teacher" asp-action="Index" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="TeacherId" class="control-label"></label>
+                <input asp-for="TeacherId" class="form-control" />
+                <span asp-validation-for="TeacherId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StudentId" class="control-label"></label>
+                <input asp-for="StudentId" class="form-control" />
+                <span asp-validation-for="StudentId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MessageTitle" class="control-label"></label>
+                <input asp-for="MessageTitle" class="form-control" />
+                <span asp-validation-for="MessageTitle" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Message" class="control-label"></label>
+                <input asp-for="Message" class="form-control" />
+                <span asp-validation-for="Message" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Send" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
