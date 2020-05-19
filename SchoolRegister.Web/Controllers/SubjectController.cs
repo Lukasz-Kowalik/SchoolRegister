@@ -7,29 +7,28 @@ using SchoolRegister.Services.Interfaces;
 using SchoolRegister.ViewModels.DTOs;
 using System;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SchoolRegister.Web.Controllers
 {
+    [Authorize(Roles = "Teacher")]
     public class SubjectController : Controller
     {
         private readonly ISubjectService _subjectService;
         private readonly ITeacherService _teacherService;
         private readonly UserManager<User> _userManager;
-        
+    
         public SubjectController(ISubjectService subjectService, ITeacherService teacherService, UserManager<User> userManager)
         {
             _subjectService = subjectService;
             _teacherService = teacherService;
             _userManager = userManager;
         }
-
+        [Authorize(Roles = "Teacher,Admin")]
         public IActionResult Index()
         {
             var user = _userManager.GetUserAsync(User).Result;
-            if (user == null)
-            {
-                return View("Error");
-            }
+         
             if (_userManager.IsInRoleAsync(user, "Admin").Result)
             {
                 return View(_subjectService.GetSubjects());

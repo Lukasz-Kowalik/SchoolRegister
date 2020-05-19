@@ -31,7 +31,10 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Subject" asp-action="Index">Subjects</a></li>
-                    <li><a asp-area="" asp-controller="Grade" asp-action="Index">Grades</a></li>
+                    @if (User.IsInRole("Student, Parent"))
+                    {
+                        <li><a asp-area="" asp-controller="Grade" asp-action="Index">Grades</a></li>
+                    }
                     <li><a asp-area="" asp-controller="Teacher" asp-action="Index">Email To parent</a></li>
                     <li><a asp-area="" asp-controller="Group" asp-action="Index">Groups</a></li>
                     <li><a asp-area="" asp-controller="Teacher" asp-action="IssueFinalGrade">Issue Final Grades</a></li>

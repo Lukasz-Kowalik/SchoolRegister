@@ -5,10 +5,12 @@ using SchoolRegister.Services.Interfaces;
 using SchoolRegister.ViewModels.DTOs;
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using SchoolRegister.ViewModels.Vms;
 
 namespace SchoolRegister.Web.Controllers
 {
+    [Authorize(Roles = "Teacher")]
     public class TeacherController : Controller
     {
         private readonly ITeacherService _teacherService;

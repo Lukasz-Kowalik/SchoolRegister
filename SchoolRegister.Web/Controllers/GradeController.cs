@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SchoolRegister.BAL.Entities;
 using SchoolRegister.Services.Interfaces;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace SchoolRegister.Web.Controllers
 {
+    [Authorize]
     public class GradeController : Controller
     {
         private readonly IGradeService _gradeService;
@@ -22,13 +24,11 @@ namespace SchoolRegister.Web.Controllers
             _userManager = userManager;
         }
 
+        [Authorize(Roles = "Parent,Student,Teacher")]
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return View("Error");
-            }
+
             var isParent = await _userManager.IsInRoleAsync(user, "Parent");
             var isStudent = await _userManager.IsInRoleAsync(user, "Student");
             var isTeacher = await _userManager.IsInRoleAsync(user, "Teacher");
@@ -57,6 +57,7 @@ namespace SchoolRegister.Web.Controllers
             }
         }
 
+        [Authorize(Roles = "Teacher")]
         [HttpGet]
         public IActionResult AddGrade()
         {
