@@ -1,9 +1,11 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - SchoolRegister.Web</title>
+    <title>@ViewData["Title"] @Localizer["SchoolRegister"]</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -30,11 +32,18 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Subject" asp-action="Index">Subjects</a></li>
-                    <li><a asp-area="" asp-controller="Grade" asp-action="Index">Grades</a></li>
-                    <li><a asp-area="" asp-controller="Teacher" asp-action="Index">Email To parent</a></li>
-                    <li><a asp-area="" asp-controller="Group" asp-action="Index">Groups</a></li>
-                    <li><a asp-area="" asp-controller="Teacher" asp-action="IssueFinalGrade">Issue Final Grades</a></li>
+                    <li><a asp-area="" asp-controller="Subject" asp-action="Index">@Localizer["Subjects"]</a></li>
+                    @if (User.IsInRole("Student") || User.IsInRole("Parent"))
+                    {
+                        <li>
+                            <a asp-area="" asp-controller="Grade" asp-action="Index">
+                                @Localizer["Grades"]
+                            </a>
+                        </li>
+                    }
+                    <li><a asp-area="" asp-controller="Teacher" asp-action="Index">@Localizer["Email To parent"]</a></li>
+                    <li><a asp-area="" asp-controller="Group" asp-action="Index">@Localizer["Groups"]</a></li>
+                    <li><a asp-area="" asp-controller="Teacher" asp-action="IssueFinalGrade">@Localizer["Issue Final Grades"]</a></li>
                 </ul>
                 <partial name="_LoginPartial" />
             </div>

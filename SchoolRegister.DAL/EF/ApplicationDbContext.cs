@@ -34,10 +34,10 @@ namespace SchoolRegister.DAL.EF
             modelBuilder.Entity<User>()
                 .ToTable("AspNetUsers")
                 .HasDiscriminator<int>("UserType")
-                .HasValue<User>(0)
-                .HasValue<Student>(1)
-                .HasValue<Parent>(2)
-                .HasValue<Teacher>(3);
+                .HasValue<User>((int) RoleValue.User)
+                .HasValue<Student>((int) RoleValue.Student)
+                .HasValue<Parent>((int) RoleValue.Parent)
+                .HasValue<Teacher>((int) RoleValue.Teacher);
 
             modelBuilder.Entity<SubjectGroup>()
                 .HasKey(sg => new { sg.GroupId, sg.SubjectId });

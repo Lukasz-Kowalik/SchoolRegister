@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using SchoolRegister.BAL.Entities;
 using SchoolRegister.Services.Interfaces;
 using SchoolRegister.ViewModels.DTOs;
@@ -8,13 +11,16 @@ using System.Threading.Tasks;
 
 namespace SchoolRegister.Web.Controllers
 {
-    public class GroupController : Controller
+    [Authorize(Roles = "Teacher")]
+    public class GroupController : BaseController<GroupController>
     {
         private readonly UserManager<User> _userManager;
         private readonly IGroupService _groupService;
         private readonly IStudentService _studentService;
 
-        public GroupController(UserManager<User> userManager, IGroupService groupService, IStudentService studentService)
+        public GroupController(UserManager<User> userManager, IGroupService groupService, IStudentService studentService,
+            IStringLocalizer<GroupController> localizer, ILoggerFactory loggerFactory
+        ) : base(localizer, loggerFactory)
         {
             _userManager = userManager;
             _groupService = groupService;
@@ -24,10 +30,7 @@ namespace SchoolRegister.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return View("Error");
-            }
+
             var isTeacher = await _userManager.IsInRoleAsync(user, "Teacher");
             if (!isTeacher)
             {
@@ -41,10 +44,6 @@ namespace SchoolRegister.Web.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            if (User.Identity.Name == null)
-            {
-                return View("Error");
-            }
             return View();
         }
 
@@ -75,10 +74,6 @@ namespace SchoolRegister.Web.Controllers
 
         public IActionResult Delete(int id)
         {
-            if (User.Identity.Name == null)
-            {
-                return View("Error");
-            }
             _groupService.Delete(id);
             return RedirectToAction("Index");
         }
@@ -86,10 +81,6 @@ namespace SchoolRegister.Web.Controllers
         [HttpGet]
         public IActionResult Edit()
         {
-            if (User.Identity.Name == null)
-            {
-                return View("Error");
-            }
             return View();
         }
 
@@ -120,11 +111,6 @@ namespace SchoolRegister.Web.Controllers
 
         public IActionResult Details(int? id)
         {
-            if (User.Identity.Name == null)
-            {
-                return View("Error");
-            }
-
             if (id == null)
             {
                 return NotFound();
@@ -139,10 +125,6 @@ namespace SchoolRegister.Web.Controllers
         [HttpGet]
         public IActionResult AddStudentToGroup(int groupId)
         {
-            if (User.Identity.Name == null)
-            {
-                return View("Error");
-            }
             TempData.Remove("groupId");
             TempData.Add("groupId", groupId);
 
@@ -155,18 +137,12 @@ namespace SchoolRegister.Web.Controllers
         {
             try
             {
-                if (User.Identity.Name == null)
-                {
-                    return View("Error");
-                }
-
-                var groupId = (int) TempData["groupId"];
+                var groupId = (int)TempData["groupId"];
 
                 _studentService.AddStudentToGroup(studentDto, groupId);
 
                 return RedirectToAction($"Details/{groupId}");
             }
-         
             catch (Exception e)
             {
                 if (e is ArgumentNullException || e is ArgumentException)
@@ -177,7 +153,6 @@ namespace SchoolRegister.Web.Controllers
 
                 return View("Error");
             }
-          
         }
 
         public IActionResult RemoveStudent(int? id)

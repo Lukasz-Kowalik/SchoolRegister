@@ -3,20 +3,21 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using SchoolRegister.BAL.Entities;
 using SchoolRegister.DAL.EF;
-using System;
-using System.Net;
-using System.Net.Mail;
-using Castle.Core.Logging;
 using SchoolRegister.Services.Interfaces;
 using SchoolRegister.Services.Services;
 using SchoolRegister.Web.Configuration;
+using System;
+using System.Globalization;
+using System.Net;
+using System.Net.Mail;
 
 namespace SchoolRegister.Web
 {
@@ -53,15 +54,30 @@ namespace SchoolRegister.Web
         public void ConfigureServices(IServiceCollection services)
         {
             #region Framework Services
+
             // Add framework services.
             services.AddOptions();
             services.AddApplicationInsightsTelemetry(Configuration);
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
- options.CheckConsentNeeded = context => true;
+                options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                var supportedCultures = new[]
+                {
+                    new CultureInfo("en"),
+                    new CultureInfo("pl-PL")
+                };
+                options.DefaultRequestCulture = new RequestCulture(culture: "en", uiCulture:
+                    "en");
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+            });
+
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(10);
@@ -110,9 +126,18 @@ namespace SchoolRegister.Web
             {
                 //add ValidateAntiForgeryToken for all post methods automatically
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            #endregion
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddJsonOptions(x =>
+                    x.SerializerSettings.DateFormatHandling =
+                        Newtonsoft.Json.DateFormatHandling.MicrosoftDateFormat)
+                .AddViewLocalization()
+                .AddDataAnnotationsLocalization();
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+            #endregion Framework Services
+
             #region Our Services
+
             var cs = new ConnectionStringDto() { ConnectionString = _connectionString };
             services.AddSingleton(cs);
             var mappingConfig = new AutoMapper.MapperConfiguration(cfg =>
@@ -123,13 +148,19 @@ namespace SchoolRegister.Web
             services.AddScoped<DbContext, ApplicationDbContext>();
             services.AddScoped<DbContextOptions<ApplicationDbContext>>();
             services.AddScoped<ISubjectService, SubjectService>();
-            #endregion
+
+            #endregion Our Services
+
             Services = services;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            var localizationOption =
+                app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
+            app.UseRequestLocalization(localizationOption.Value);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -143,6 +174,7 @@ namespace SchoolRegister.Web
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseAuthentication();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

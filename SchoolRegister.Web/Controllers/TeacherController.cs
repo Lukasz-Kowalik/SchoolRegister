@@ -1,21 +1,27 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using SchoolRegister.BAL.Entities;
 using SchoolRegister.Services.Interfaces;
 using SchoolRegister.ViewModels.DTOs;
+using SchoolRegister.ViewModels.Vms;
 using System;
 using System.Threading.Tasks;
-using SchoolRegister.ViewModels.Vms;
 
 namespace SchoolRegister.Web.Controllers
 {
-    public class TeacherController : Controller
+    [Authorize(Roles = "Teacher")]
+    public class TeacherController : BaseController<TeacherController>
     {
         private readonly ITeacherService _teacherService;
         private readonly UserManager<User> _userManager;
         private readonly IStudentService _studentService;
 
-        public TeacherController(ITeacherService teacherService, UserManager<User> userManager, IStudentService studentService)
+        public TeacherController(ITeacherService teacherService, UserManager<User> userManager, IStudentService studentService,
+            IStringLocalizer<TeacherController> localizer, ILoggerFactory loggerFactory
+        ) : base(localizer, loggerFactory)
         {
             _teacherService = teacherService;
             _userManager = userManager;
@@ -25,10 +31,7 @@ namespace SchoolRegister.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return View("Error");
-            }
+          
             if (_userManager.IsInRoleAsync(user, "Teacher").Result)
             {
                 return View();

@@ -1,5 +1,6 @@
-﻿@model IEnumerable<SchoolRegister.ViewModels.Vms.GradeVm>
-
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@model IEnumerable<SchoolRegister.ViewModels.Vms.GradeVm>
+@inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -10,7 +11,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Student.FirstName)
+               @Html.DisplayNameFor(model => model.Student.FirstName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Student.LastName)
@@ -21,7 +22,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.GradeValue)
             </th>
-         
+
         </tr>
     </thead>
     <tbody>
@@ -43,7 +44,7 @@
                         @Html.DisplayFor(modelItem => item.GradeValue)
                     </td>
 
-                    
+
                 </tr>
             }
         }

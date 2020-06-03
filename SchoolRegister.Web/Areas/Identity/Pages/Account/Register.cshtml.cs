@@ -13,7 +13,7 @@ using SchoolRegister.BAL.Entities;
 
 namespace SchoolRegister.Web.Areas.Identity.Pages.Account
 {
-    [AllowAnonymous]
+    [Authorize(Roles = "Admin")]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<User> _signInManager;

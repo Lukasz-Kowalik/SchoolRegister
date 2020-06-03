@@ -1,6 +1,7 @@
 ﻿@using SchoolRegister.ViewModels.Vms
+@using Microsoft.AspNetCore.Mvc.Localization
 @model SchoolRegister.ViewModels.Vms.GroupVm
-
+@inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
