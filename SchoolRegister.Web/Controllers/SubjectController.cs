@@ -1,34 +1,38 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using SchoolRegister.BAL.Entities;
 using SchoolRegister.Services.Interfaces;
 using SchoolRegister.ViewModels.DTOs;
 using System;
 using System.Linq;
-using Microsoft.AspNetCore.Authorization;
 
 namespace SchoolRegister.Web.Controllers
 {
-    [Authorize(Roles = "Teacher")]
-    public class SubjectController : Controller
+    [Authorize(Roles = "Teacher,Admin")]
+    public class SubjectController : BaseController<SubjectController>
     {
         private readonly ISubjectService _subjectService;
         private readonly ITeacherService _teacherService;
         private readonly UserManager<User> _userManager;
-    
-        public SubjectController(ISubjectService subjectService, ITeacherService teacherService, UserManager<User> userManager)
+
+        public SubjectController(ISubjectService subjectService, ITeacherService teacherService, UserManager<User> userManager,
+            IStringLocalizer<SubjectController> localizer, ILoggerFactory loggerFactory
+            ) : base(localizer, loggerFactory)
         {
             _subjectService = subjectService;
             _teacherService = teacherService;
             _userManager = userManager;
         }
-        [Authorize(Roles = "Teacher,Admin")]
+
         public IActionResult Index()
         {
             var user = _userManager.GetUserAsync(User).Result;
-         
+
             if (_userManager.IsInRoleAsync(user, "Admin").Result)
             {
                 return View(_subjectService.GetSubjects());
@@ -58,10 +62,10 @@ namespace SchoolRegister.Web.Controllers
             if (id.HasValue)
             {
                 var subjectVm = _subjectService.GetSubject(subject => subject.Id == id);
-                ViewBag.ActionType = "Edit";
+                ViewBag.ActionType = _localizer["Edit"];
                 return View(Mapper.Map<AddOrUpdateSubjectDto>(subjectVm));
             }
-            ViewBag.ActionType = "Add";
+            ViewBag.ActionType = _localizer["Add"];
             return View();
         }
 

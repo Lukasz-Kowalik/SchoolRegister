@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using SchoolRegister.BAL.Entities;
 using SchoolRegister.Services.Interfaces;
 using SchoolRegister.ViewModels.DTOs;
@@ -10,13 +12,15 @@ using System.Threading.Tasks;
 namespace SchoolRegister.Web.Controllers
 {
     [Authorize(Roles = "Teacher")]
-    public class GroupController : Controller
+    public class GroupController : BaseController<GroupController>
     {
         private readonly UserManager<User> _userManager;
         private readonly IGroupService _groupService;
         private readonly IStudentService _studentService;
 
-        public GroupController(UserManager<User> userManager, IGroupService groupService, IStudentService studentService)
+        public GroupController(UserManager<User> userManager, IGroupService groupService, IStudentService studentService,
+            IStringLocalizer<GroupController> localizer, ILoggerFactory loggerFactory
+        ) : base(localizer, loggerFactory)
         {
             _userManager = userManager;
             _groupService = groupService;

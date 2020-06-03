@@ -1,5 +1,6 @@
-﻿@model SchoolRegister.ViewModels.DTOs.EmailMessageDto
-
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@model SchoolRegister.ViewModels.DTOs.EmailMessageDto
+@inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = "Send email";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -32,7 +33,7 @@
                 <span asp-validation-for="Message" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Send" class="btn btn-default" />
+                <input type="submit" value="@Localizer["Submit"]" class="btn btn-default" />
             </div>
         </form>
     </div>

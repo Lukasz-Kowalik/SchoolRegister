@@ -7,8 +7,10 @@ namespace SchoolRegister.BAL.Entities
     public class Grade
     {
         [Key]
+        [Display(Name = "Date Of Issue")]
         public DateTime DateOfIssue { get; set; }
 
+        [Display(Name = "Grade Value")]
         public GradeScale GradeValue { get; set; }
 
         [ForeignKey("Subject")]

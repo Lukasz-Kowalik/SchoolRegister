@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using SchoolRegister.BAL.Entities;
 using SchoolRegister.Services.Interfaces;
 using SchoolRegister.ViewModels.DTOs;
@@ -11,13 +13,15 @@ using System.Threading.Tasks;
 namespace SchoolRegister.Web.Controllers
 {
     [Authorize]
-    public class GradeController : Controller
+    public class GradeController : BaseController<GradeController>
     {
         private readonly IGradeService _gradeService;
         private readonly UserManager<User> _userManager;
         private readonly IParentService _parentService;
 
-        public GradeController(UserManager<User> userManager, IGradeService gradeService, IParentService parentService)
+        public GradeController(UserManager<User> userManager, IGradeService gradeService, IParentService parentService,
+            IStringLocalizer<GradeController> localizer, ILoggerFactory loggerFactory
+        ) : base(localizer, loggerFactory)
         {
             _gradeService = gradeService;
             _parentService = parentService;
@@ -76,7 +80,7 @@ namespace SchoolRegister.Web.Controllers
             try
             {
                 _gradeService.AddGrade(grade);
-                ViewBag.Success = $"Grade added";
+                ViewBag.Success = _localizer["Grade added"];
                 return View();
             }
             catch (Exception e)
