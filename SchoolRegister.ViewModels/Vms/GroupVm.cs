@@ -11,6 +11,5 @@ namespace SchoolRegister.ViewModels.Vms
         public string Name { get; set; }
 
         public virtual IList<StudentVm> Students { get; set; }
-        public virtual IList<SubjectGroupVm> SubjectGroups { get; set; }
     }
 }

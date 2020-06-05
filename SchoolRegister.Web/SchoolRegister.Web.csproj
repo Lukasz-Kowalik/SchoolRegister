@@ -33,7 +33,6 @@
     <Folder Include="Areas\Identity\Services\" />
     <Folder Include="Resources\Areas\Identity\Pages\Account\" />
     <Folder Include="Resources\Views\Group\" />
-    <Folder Include="Resources\Views\Subject\" />
     <Folder Include="Resources\Views\Teacher\" />
   </ItemGroup>
 
