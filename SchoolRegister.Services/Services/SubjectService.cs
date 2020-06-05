@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using SchoolRegister.BAL.Entities;
 using SchoolRegister.DAL.EF;
 using SchoolRegister.Services.Interfaces;
 using SchoolRegister.ViewModels.DTOs;
 using SchoolRegister.ViewModels.Vms;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace SchoolRegister.Services.Services
 {
@@ -18,6 +17,7 @@ namespace SchoolRegister.Services.Services
         public SubjectService(ApplicationDbContext dbContext) : base(dbContext)
         {
         }
+
         public SubjectVm AddOrUpdate(AddOrUpdateSubjectDto addOrUpdateDto)
         {
             if (addOrUpdateDto == null)
@@ -37,6 +37,7 @@ namespace SchoolRegister.Services.Services
             var subjectVm = Mapper.Map<SubjectVm>(subjectEntity);
             return subjectVm;
         }
+
         public SubjectVm GetSubject(Expression<Func<Subject, bool>> filterPredicate)
         {
             if (filterPredicate == null)
@@ -49,6 +50,7 @@ namespace SchoolRegister.Services.Services
             SubjectVm subjectVm = Mapper.Map<SubjectVm>(subjectEntity);
             return subjectVm;
         }
+
         public IEnumerable<SubjectVm> GetSubjects(Expression<Func<Subject, bool>> filterPredicate = null)
         {
             var subjectEntities = _dbContext.Subjects

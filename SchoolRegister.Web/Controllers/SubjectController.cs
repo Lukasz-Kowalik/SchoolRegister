@@ -8,8 +8,10 @@ using Microsoft.Extensions.Logging;
 using SchoolRegister.BAL.Entities;
 using SchoolRegister.Services.Interfaces;
 using SchoolRegister.ViewModels.DTOs;
+using SchoolRegister.Web.Extensions;
 using System;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace SchoolRegister.Web.Controllers
 {
@@ -29,18 +31,47 @@ namespace SchoolRegister.Web.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string filterValue = null)
         {
+            Expression<Func<Subject, bool>> filterPredicate = null;
+            if (!string.IsNullOrWhiteSpace(filterValue))
+            {
+                filterPredicate = x => x.Name.Contains(filterValue);
+            }
+
+            bool isAjax = HttpContext.Request.Headers["x-requested-with"] == "XMLHttpRequest";
+
             var user = _userManager.GetUserAsync(User).Result;
 
             if (_userManager.IsInRoleAsync(user, "Admin").Result)
             {
-                return View(_subjectService.GetSubjects());
+                var subjectVm = _subjectService.GetSubjects(filterPredicate);
+                if (isAjax)
+                {
+                    return PartialView("_SubjectsTableDataPartial", subjectVm);
+                }
+                return View(subjectVm);
             }
             else if (_userManager.IsInRoleAsync(user, "Teacher").Result)
             {
                 var teacher = _userManager.GetUserAsync(User).Result as Teacher;
-                return View(_subjectService.GetSubjects(x => x.TeacherId == user.Id));
+                Expression<Func<Subject, bool>> filterTeacher = x => x.TeacherId == teacher.Id;
+                var finalExpression = filterPredicate != null
+                    ? Expression.Lambda<Func<Subject, bool>>(
+                        Expression.AndAlso(filterPredicate.Body,
+                            new ExpressionParameterReplacer(filterTeacher.Parameters, filterPredicate.Parameters)
+                                .Visit(filterTeacher.Body)), filterPredicate.Parameters)
+                    : filterTeacher;
+                var subjectVm = _subjectService.GetSubjects(finalExpression);
+                if (isAjax)
+                {
+                    return PartialView("_SubjectsTableDataPartial", subjectVm);
+                }
+                return View(subjectVm);
+            }
+            else if (_userManager.IsInRoleAsync(user, "Student").Result)
+            {
+                return RedirectToAction("Details", "Student", new { studentId = user.Id });
             }
             else
             {
@@ -88,6 +119,11 @@ namespace SchoolRegister.Web.Controllers
                 Console.WriteLine(e);
                 throw;
             }
+        }
+
+        public IActionResult Details(int id)
+        {
+            return View();
         }
     }
 }

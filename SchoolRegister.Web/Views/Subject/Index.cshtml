@@ -1,53 +1,47 @@
 ﻿@model IEnumerable<SchoolRegister.ViewModels.Vms.SubjectVm>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
-@{
-    ViewData["Title"] = "Index";
-}
-
-<h2>Index</h2>
+<h2>@Localizer["Subject"]</h2>
 
 <p>
-    <a asp-action="AddOrEditSubject">Create new</a>
+    <a asp-action="AddOrEditSubject">@Localizer["CreateNew"]</a>
 </p>
+<div class="row">
+    <div class="col-lg-4">
+        <input id="subjects-filter-input" class="form-control" type="text" placeholder="filter" />
+    </div>
+</div>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Id)
+                <label>
+                    @Localizer["Name"]
+                </label>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                <label>
+                    @Localizer["Description"]
+                </label>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                <label>
+                    @Localizer["TeacherName"]
+                </label>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TeacherName)
+                <label>
+                    @Localizer["GroupCount"]
+                </label>
             </th>
             <th></th>
         </tr>
     </thead>
-    <tbody>
-
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TeacherName)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "AddOrEditSubject", new { id = item.Id }) |
-                </td>
-            </tr>
-        }
+    <tbody class="subjects-table-data">
+    @if (Model != null)
+    {
+        <partial name="_SubjectsTableDataPartial" model="Model"/>
+    }
     </tbody>
 </table>
