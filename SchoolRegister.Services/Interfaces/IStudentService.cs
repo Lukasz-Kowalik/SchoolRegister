@@ -1,9 +1,9 @@
 ﻿using SchoolRegister.BAL.Entities;
+using SchoolRegister.ViewModels.DTOs;
 using SchoolRegister.ViewModels.Vms;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using SchoolRegister.ViewModels.DTOs;
 
 namespace SchoolRegister.Services.Interfaces
 {
@@ -13,8 +13,12 @@ namespace SchoolRegister.Services.Interfaces
 
         IEnumerable<StudentVm> GetStudents(Expression<Func<Student, bool>> expression = null);
 
+        IEnumerable<StudentVm> GetStudentsForTeacher(Expression<Func<Student, bool>> expression = null);
+
         void Update(StudentVm studentVm);
+
         void RemoveStudentFromGroup(int? studentId);
+
         void AddStudentToGroup(StudentDto studentDto, int? groupId);
     }
 }

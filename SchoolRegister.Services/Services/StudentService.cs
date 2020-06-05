@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using SchoolRegister.BAL.Entities;
 using SchoolRegister.DAL.EF;
 using SchoolRegister.Services.Interfaces;
+using SchoolRegister.ViewModels.DTOs;
 using SchoolRegister.ViewModels.Vms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using SchoolRegister.ViewModels.DTOs;
 
 namespace SchoolRegister.Services.Services
 {
@@ -30,22 +30,39 @@ namespace SchoolRegister.Services.Services
             return studentVm;
         }
 
-        public IEnumerable<StudentVm> GetStudents(Expression<Func<Student, bool>> expression = null)
+        public IEnumerable<StudentVm> GetStudentsForTeacher(Expression<Func<Student, bool>> expression = null)
         {
             var studentsEntity = _dbContext.Users.OfType<Student>()
                     .Include(s => s.Grades)
                     .ThenInclude(g => g.Subject)
                     .Include(s => s.Group)
+                    .ThenInclude(g=>g.SubjectGroups)
+                    .ThenInclude(sg => sg.Subject)
+                    .ThenInclude(s=>s.Teacher)
                     .Include(s => s.Parent)
                 .AsQueryable();
-            if (expression == null)
+            if (expression != null)
             {
                 studentsEntity = studentsEntity.Where(expression);
             }
             var studentVm = Mapper.Map<IEnumerable<StudentVm>>(studentsEntity);
             return studentVm;
         }
-
+        public IEnumerable<StudentVm> GetStudents(Expression<Func<Student, bool>> expression = null)
+        {
+            var studentsEntity = _dbContext.Users.OfType<Student>()
+                .Include(s => s.Grades)
+                .ThenInclude(g => g.Subject)
+                .Include(s => s.Group)
+                .Include(s => s.Parent)
+                .AsQueryable();
+            if (expression != null)
+            {
+                studentsEntity = studentsEntity.Where(expression);
+            }
+            var studentVm = Mapper.Map<IEnumerable<StudentVm>>(studentsEntity);
+            return studentVm;
+        }
         public void Update(StudentVm studentVm)
         {
             if (studentVm == null)

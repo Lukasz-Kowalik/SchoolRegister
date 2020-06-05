@@ -1,0 +1,47 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@model IEnumerable<SchoolRegister.ViewModels.Vms.StudentVm>
+@inject IViewLocalizer Localizer
+    <h2>@Localizer["Students"]</h2>
+    <div class="row">
+        <div class="col-lg-4">
+            <input id="students-filter-input" class="form-control" type="text" placeholder="filter" />
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <label>
+                        Id
+                    </label>
+                </th>
+                <th>
+                    <label>
+                        @Localizer["FirstName"]
+                    </label>
+                </th>
+                <th>
+                    <label>
+                        @Localizer["LastName"]
+                    </label>
+                </th>
+                <th>
+                    <label>
+                        @Localizer["GroupId"]
+                    </label>
+                </th>
+                <th>
+                    <label>
+                        @Localizer["Parent Id"]
+                    </label>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody class="students-table-data">
+            @if (Model != null)
+            {
+                <partial model="Model" name="_StudentsTableDataPartial" />
+            }
+        </tbody>
+    </table>
