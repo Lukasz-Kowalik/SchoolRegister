@@ -14,6 +14,7 @@ using SchoolRegister.DAL.EF;
 using SchoolRegister.Services.Interfaces;
 using SchoolRegister.Services.Services;
 using SchoolRegister.Web.Configuration;
+using SchoolRegister.Web.Hubs;
 using System;
 using System.Globalization;
 using System.Net;
@@ -134,6 +135,8 @@ namespace SchoolRegister.Web
                 .AddDataAnnotationsLocalization();
             services.AddLocalization(options => options.ResourcesPath = "Resources");
 
+            services.AddSignalR();
+
             #endregion Framework Services
 
             #region Our Services
@@ -180,6 +183,10 @@ namespace SchoolRegister.Web
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+            });
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<ChatHub>("/chatHub");
             });
         }
     }

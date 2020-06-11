@@ -32,19 +32,32 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Subject" asp-action="Index">@Localizer["Subjects"]</a></li>
                     @if (User.IsInRole("Student") || User.IsInRole("Parent"))
                     {
-                        <li>
-                            <a asp-area="" asp-controller="Grade" asp-action="Index">
-                                @Localizer["Grades"]
-                            </a>
-                        </li>
+                        <li><a asp-area="" asp-controller="Grade" asp-action="Index">@Localizer["Grades"]</a></li>
                     }
-                    <li><a asp-area="" asp-controller="Teacher" asp-action="Index">@Localizer["Email To parent"]</a></li>
-                    <li><a asp-area="" asp-controller="Group" asp-action="Index">@Localizer["Groups"]</a></li>
-                    <li><a asp-area="" asp-controller="Teacher" asp-action="IssueFinalGrade">@Localizer["Issue Final Grades"]</a></li>
-                    <li><a asp-area="" asp-controller="Student" asp-action="Index">@Localizer["Students"]</a></li>
+                    @if (User.IsInRole("Teacher") || User.IsInRole("Admin"))
+                    {
+                        <li><a asp-area="" asp-controller="Subject" asp-action="Index">@Localizer["Subjects"]</a></li>
+                        <li><a asp-area="" asp-controller="Group" asp-action="Index">@Localizer["Groups"]</a></li>
+                    }
+                    @if (User.IsInRole("Teacher") || User.IsInRole("Admin") || User.IsInRole("Parent"))
+                    {
+                        <li><a asp-area="" asp-controller="Student" asp-action="Index">@Localizer["Students"]</a></li>
+                    }
+                    @if (User.IsInRole("Student"))
+                    {
+                        <li><a asp-area="" asp-controller="Student" asp-action="Details">@Localizer["Students"]</a></li>
+                    }
+                    @if (User.IsInRole("Teacher"))
+                    {
+                        <li><a asp-area="" asp-controller="Teacher" asp-action="Index">@Localizer["Email To parent"]</a></li>
+                        <li><a asp-area="" asp-controller="Teacher" asp-action="IssueFinalGrade">@Localizer["Issue Final Grades"]</a></li>
+                    }
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li><a asp-area="" asp-controller="Chat" asp-action="Index">@Localizer["Chat"]</a></li>
+                    }
                 </ul>
                 <partial name="_LoginPartial" />
             </div>

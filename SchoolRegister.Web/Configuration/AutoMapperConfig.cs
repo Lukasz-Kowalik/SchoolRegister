@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using SchoolRegister.BAL.Entities;
 using SchoolRegister.ViewModels.DTOs;
 using SchoolRegister.ViewModels.Vms;
@@ -21,6 +22,23 @@ namespace SchoolRegister.Web.Configuration
                 mapper.CreateMap<StudentVm, StudentDto>();
                 mapper.CreateMap<GroupVm, GradeDto>();
                 mapper.CreateMap<GradeScaleVm, GradeScaleDto>();
+
+                mapper.CreateMap<GroupVm, SelectListItem>()
+                    .ForMember(x => x
+                        .Text, y => y
+                        .MapFrom(z => z.Name))
+                    .ForMember(x => x
+                        .Value, y => y
+                        .MapFrom(z => z.Id));
+
+                mapper.CreateMap<StudentVm, SelectListItem>()
+                    .ForMember(x => x
+                        .Text, y => y
+                        .MapFrom(z => z.UserName))
+                    .ForMember(x => x
+                        .Value, y => y
+                        .MapFrom(z => z.Id));
+
                 //dto->entity
                 mapper.CreateMap<AddOrUpdateSubjectDto, Subject>();
                 mapper.CreateMap<GradeDto, Grade>();
